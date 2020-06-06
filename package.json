@@ -4,7 +4,8 @@
   "description": "Walk through data. Do things as you go.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test:watch": "nodemon --exec \"mocha\""
   },
   "keywords": [],
   "author": "Stephen Mizell",
