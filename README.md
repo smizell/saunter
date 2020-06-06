@@ -18,18 +18,10 @@ Walks through objects and arrays.
 walk(value, handlers, options);
 ```
 
-Arguments:
-
 - `value`: value to walk, either object or array
 - `handlers`: array of Handler instances
 - `options`:
-  - `breakWhen`: function that takes a context and returns a boolean, and true will stop all future calls.
-
-Context:
-
-- `checkPassed`: boolean, comes from when running handler `check`
-- `trueResult`: Result, comes from handler `onTrue` call
-- `falseResult`: Result, comes from handler `onFalse` call
+  - `breakWhen`: function, takes Context, returns a boolean, true will stop the walking.
 
 Example:
 
@@ -63,6 +55,14 @@ const collectValues = new Handler({
 
 `Handler` also takes an `onFalse` function that will be called when the check fails.
 
-### `WalkResult`
+### `Result`
 
-This is a value class for capturing a result while walking. The `onTrue` functions in handlers should return a `WalkResult`. See example above.
+This is a value class for capturing a result while walking. The `onTrue` functions in handlers should return a `Result`. See example above.
+
+### `Context`
+
+This is passed into functions like `breakWhen` so it can make decisions when to break and stop the walking.
+
+- `checkPassed`: boolean, comes from when running handler `check`
+- `trueResult`: Result, comes from handler `onTrue` call
+- `falseResult`: Result, comes from handler `onFalse` call
