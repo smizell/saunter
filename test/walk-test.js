@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { walk, Handler, WalkResult } = require("../lib");
+const { walk, Handler, Result } = require("../lib");
 const lodash = require("lodash");
 
 // Only collect values that aren't objects or arrays
@@ -10,7 +10,7 @@ const collectValues = new Handler({
   },
   onTrue: (value, result, _path) => {
     const newValue = lodash.concat(result.value || [], value);
-    return new WalkResult(newValue);
+    return new Result(newValue);
   }
 });
 
@@ -21,7 +21,7 @@ const collectOdds = new Handler({
   },
   onFalse: (value, result, _path) => {
     const newValue = lodash.concat(result.value || [], value);
-    return new WalkResult(newValue);
+    return new Result(newValue);
   }
 });
 
