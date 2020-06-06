@@ -4,11 +4,11 @@ const lodash = require("lodash");
 
 // Only collect values that aren't objects or arrays
 const collectValues = new Handler({
-  check: (value, _result, _path) => {
+  check: ({ value }) => {
     if (lodash.isPlainObject(value) || lodash.isArray(value)) return false;
     return true;
   },
-  onTrue: (value, result, _path) => {
+  onTrue: ({ value, result }) => {
     const newValue = lodash.concat(result.value || [], value);
     return new Result(newValue);
   }
@@ -16,10 +16,10 @@ const collectValues = new Handler({
 
 const collectOdds = new Handler({
   // Match
-  check: (value, _result, _path) => {
+  check: ({ value }) => {
     return value % 2 == 0;
   },
-  onFalse: (value, result, _path) => {
+  onFalse: ({ value, result }) => {
     const newValue = lodash.concat(result.value || [], value);
     return new Result(newValue);
   }
