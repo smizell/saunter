@@ -14,6 +14,17 @@ const collectValues = new Handler({
   }
 });
 
+const collectOdds = new Handler({
+  // Match
+  check: (value, _result, _path) => {
+    return value % 2 == 0;
+  },
+  onFalse: (value, result, _path) => {
+    const newValue = lodash.concat(result.value || [], value);
+    return new WalkResult(newValue);
+  }
+});
+
 describe("Sauntering", function() {
   context("collecting", function() {
     it("walks objects", function() {
@@ -62,6 +73,14 @@ describe("Sauntering", function() {
       };
       const result = walk(value, [collectValues]);
       expect(result.value).to.deep.equal([1, 2, 3, 4]);
+    });
+  });
+
+  context("Handler", function() {
+    it("runs onFalse", function() {
+      const value = [1, 2, 3, 4];
+      const result = walk(value, [collectOdds]);
+      expect(result.value).to.deep.equal([1, 3]);
     });
   });
 });

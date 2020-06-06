@@ -27,6 +27,8 @@ const result = walk(value, [collectValues]);
 The `Handler` class is for building handlers to be used while walking. They will check to see if the context matches a condition. If the `check` returns `true`, the `onTrue` function will be called.
 
 ```javascript
+const { Handler, WalkResult } = require("saunter");
+
 // Only collect values that aren't objects or arrays
 const collectValues = new Handler({
   check: (value, _result, _path) => {
@@ -39,6 +41,8 @@ const collectValues = new Handler({
   }
 });
 ```
+
+`Handler` also takes an `onFalse` function that will be called when the check fails.
 
 ### `WalkResult`
 
