@@ -1,16 +1,19 @@
 {
   "name": "saunter",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Walk through data. Do things as you go.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Stephen Mizell",
+  "license": "MIT",
   "devDependencies": {
+    "chai": "^4.2.0",
     "mocha": "^7.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
 }
