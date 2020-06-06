@@ -15,6 +15,25 @@ npm install saunter
 Walks through objects and arrays.
 
 ```javascript
+walk(value, handlers, options);
+```
+
+Arguments:
+
+- `value`: value to walk, either object or array
+- `handlers`: array of Handler instances
+- `options`:
+  - `breakWhen`: function that takes a context and returns a boolean, and true will stop all future calls.
+
+Context:
+
+- `checkPassed`: boolean, comes from when running handler `check`
+- `trueResult`: Result, comes from handler `onTrue` call
+- `falseResult`: Result, comes from handler `onFalse` call
+
+Example:
+
+```javascript
 const { walk } = require("saunter");
 // See collectValues handler example under the Handler section
 const result = walk(value, [collectValues]);
