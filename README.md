@@ -1,6 +1,6 @@
-# Sauntering
+# Saunter
 
-Walk through data. Do things as you go.
+Walk through data. Do things as you go. Collect the things you need.
 
 ## Install
 
