@@ -25,7 +25,7 @@ const collectOdds = new Handler({
   }
 });
 
-describe("Sauntering", function() {
+describe("Walking", function() {
   context("collecting", function() {
     it("walks objects", function() {
       const value = {
@@ -73,6 +73,14 @@ describe("Sauntering", function() {
       };
       const result = walk(value, [collectValues]);
       expect(result.value).to.deep.equal([1, 2, 3, 4]);
+    });
+
+    it("breaks when applicable", function() {
+      const value = [1, 2, 3, 4, 5];
+      const result = walk(value, [collectValues], {
+        breakWhen: c => c.checkPassed
+      });
+      expect(result.value).to.deep.equal([1]);
     });
   });
 
