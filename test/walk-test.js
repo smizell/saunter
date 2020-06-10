@@ -41,4 +41,11 @@ describe("walk", function() {
       expect(values).to.deep.equal([1, 2, { a: 3 }, 3]);
     });
   });
+  context("when subject is not walkable", function() {
+    it("returns the subject", function() {
+      const subject = 42;
+      const walker = walk(42);
+      expect([...walker]).to.deep.equal([{ path: [], value: 42 }]);
+    });
+  });
 });
