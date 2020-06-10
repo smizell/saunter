@@ -1,94 +1,44 @@
 const { expect } = require("chai");
-const { walk, Handler, Result } = require("../lib");
-const lodash = require("lodash");
+const { walk } = require("../lib");
+const R = require("ramda");
 
-// Only collect values that aren't objects or arrays
-const collectValues = new Handler({
-  check: ({ value }) => {
-    if (lodash.isPlainObject(value) || lodash.isArray(value)) return false;
-    return true;
-  },
-  onTrue: ({ value, result }) => {
-    const newValue = lodash.concat(result.value || [], value);
-    return new Result(newValue);
-  }
-});
-
-const collectOdds = new Handler({
-  // Match
-  check: ({ value }) => {
-    return value % 2 == 0;
-  },
-  onFalse: ({ value, result }) => {
-    const newValue = lodash.concat(result.value || [], value);
-    return new Result(newValue);
-  }
-});
-
-describe("Walking", function() {
-  context("collecting", function() {
-    it("walks objects", function() {
-      const value = {
-        foo: 1,
-        baz: 2
+describe("walk", function() {
+  context("when subject is an object", function() {
+    it("walks through each property", function() {
+      const subject = {
+        a: 1,
+        b: 2,
+        c: 3
       };
-      const result = walk(value, [collectValues]);
-      expect(result.value).to.deep.equal([1, 2]);
+      const walker = walk(subject);
+      const values = R.map(R.prop("value"), [...walker]);
+      expect(values).to.deep.equal([1, 2, 3]);
     });
-
-    it("walks arrays", function() {
-      const value = [
-        {
-          foo: 1,
-          baz: 2
-        },
-        3
-      ];
-      const result = walk(value, [collectValues]);
-      expect(result.value).to.deep.equal([1, 2, 3]);
-    });
-
-    it("follows nested objects", function() {
-      const value = {
-        foo: 1,
-        baz: 2,
-        bar: {
-          biz: 3
+    it("walks nested objects", function() {
+      const subject = {
+        a: 1,
+        b: 2,
+        c: {
+          d: 3
         }
       };
-      const result = walk(value, [collectValues]);
-      expect(result.value).to.deep.equal([1, 2, 3]);
-    });
-
-    it("follows nested arrays", function() {
-      const value = {
-        foo: 1,
-        baz: 2,
-        bar: [
-          {
-            biz: 3,
-            buz: 4
-          }
-        ]
-      };
-      const result = walk(value, [collectValues]);
-      expect(result.value).to.deep.equal([1, 2, 3, 4]);
-    });
-
-    it("breaks when applicable", function() {
-      const value = [1, 2, 3, 4, 5];
-      const result = walk(value, [collectValues], {
-        breakWhen: c => c.checkPassed
-      });
-      expect(result.value).to.deep.equal([1]);
+      const walker = walk(subject);
+      const values = R.map(R.prop("value"), [...walker]);
+      expect(values).to.deep.equal([1, 2, { d: 3 }, 3]);
     });
   });
-
-  context("Handler", function() {
-    it("runs onFalse", function() {
-      const value = [1, 2, 3, 4];
-      const result = walk(value, [collectOdds]);
-      expect(result.value).to.deep.equal([1, 3]);
+  context("when subject is an array", function() {
+    it("walks through each item", function() {
+      const subject = [1, 2, 3];
+      const walker = walk(subject);
+      const values = R.map(R.prop("value"), [...walker]);
+      expect(values).to.deep.equal([1, 2, 3]);
+    });
+    it("walks nested objects", function() {
+      const subject = [1, 2, { a: 3 }];
+      const walker = walk(subject);
+      const values = R.map(R.prop("value"), [...walker]);
+      expect(values).to.deep.equal([1, 2, { a: 3 }, 3]);
     });
   });
 });
