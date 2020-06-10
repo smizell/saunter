@@ -34,6 +34,44 @@ const result = walk({ foo: 1, bar: 2 }, [collectValues]);
 // result = [1, 2]
 ```
 
+## Handler functions
+
+### `when`
+
+Function to make writing handlers easier
+
+```javascript
+const { walk, handlers } = require("saunter");
+const { when } = handlers;
+
+const value = [1, 2, 3, 4, 5, 6];
+
+const oddEven = when(
+  // condition, check if value is even
+  ({ value }) => value % 2 === 0,
+  // if condition is met, push to even
+  ({ value, result }) => {
+    result.value.even.push(value);
+    return result;
+  },
+  // if not met, push to odd
+  ({ value, result }) => {
+    result.value.odd.push(value);
+    return result;
+  }
+);
+
+const result = walk(value, [when(cond, trueFn, falseFn)], {
+  initialResult: { even: [], odd: [] }
+});
+
+// result.value:
+// {
+//   even: [2, 4, 6],
+//   odd: [1, 3, 5]
+// }
+```
+
 ## Classes
 
 ### `Handler`
