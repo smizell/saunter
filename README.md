@@ -1,6 +1,6 @@
 # Saunter
 
-Walk through data. Do things as you go. Collect the things you need.
+Walk through data. Do things as you go.
 
 ## Install
 
@@ -10,127 +10,44 @@ npm install saunter
 
 ## Usage
 
+Saunter is meant to be used with libraries like [Ramda](https://ramdajs.com/), [Transducers.js](https://github.com/cognitect-labs/transducers-js), or [Lodash](https://lodash.com/).
+
 ### `walk`
 
-Walks through objects and arrays.
+The `walk` function takes an object or array and walks through it. Calling `walk` will return a generator that can be iterated over. The generator yields a function for every value it finds.
 
-```javascript
-walk(value, handlers, options);
-```
+- `path` (array) - The path to the value. It will be an array of object properties and array indexes.
+- `value` (any) - The value for the given path.
 
-Arguments:
+Note: this will find every value, even objects. This means you will get a value for an object and then values for each property in the object.
 
-- `value`: object | array, value to walk
-- `handlers`: array[Handler] instances
-- `options`:
-  - `breakWhen`: (Context) -> boolean, true stops the walking
-
-Example:
-
-```javascript
+```js
 const { walk } = require("saunter");
-// See collectValues handler example under the Handler section
-const result = walk({ foo: 1, bar: 2 }, [collectValues]);
-// result = [1, 2]
-```
-
-## Handler functions
-
-### `when`
-
-Function to make writing handlers easier
-
-```javascript
-const { walk, handlers } = require("saunter");
-const { when } = handlers;
-
-const value = [1, 2, 3, 4, 5, 6];
-
-const oddEven = when(
-  // condition, check if value is even
-  ({ value }) => value % 2 === 0,
-  // if condition is met, push to even
-  ({ value, result }) => {
-    result.value.even.push(value);
-    return result;
-  },
-  // if not met, push to odd
-  ({ value, result }) => {
-    result.value.odd.push(value);
-    return result;
+const subject = {
+  name: "Jane Doe",
+  email: "jdoe@example.com",
+  address: {
+    city: "New York",
+    state: "New York",
+    zip: "10101"
   }
-);
-
-const result = walk(value, [when(cond, trueFn, falseFn)], {
-  initialResult: { even: [], odd: [] }
-});
-
-// result.value:
-// {
-//   even: [2, 4, 6],
-//   odd: [1, 3, 5]
-// }
+};
+const walker = walk(subject);
+console.log([...walker]);
 ```
 
-## Classes
+This prints:
 
-### `Handler`
-
-The `Handler` class is for building handlers to be used while walking. They will check to see if the context matches a condition. If the `check` returns `true`, the `onTrue` function will be called. Otherwise, the `onFalse` function will be called.
-
-Example:
-
-```javascript
-const lodash = require("lodash");
-const { walk, Handler, Result } = require("saunter");
-
-// Only collect values that aren't objects or arrays
-const collectValues = new Handler({
-  check: (value, _result, _path) => {
-    if (lodash.isPlainObject(value) || lodash.isArray(value)) return false;
-    return true;
+```js
+[
+  { path: ["name"], value: "Jane Doe" },
+  { path: ["email"], value: "jdoe@example.com" },
+  {
+    path: ["address"],
+    value: { city: "New York", state: "New York", zip: "10101" }
   },
-  onTrue: (value, result, _path) => {
-    const newValue = lodash.concat(result.value || [], value);
-    return new Result(newValue);
-  }
-});
-
-const result = walk({ foo: 1, bar: 2 }, [collectValues]);
-// result = [1, 2]
+  { path: ["address", "city"], value: "New York" },
+  { path: ["address", "state"], value: "New York" },
+  { path: ["address", "zip"], value: "10101" }
+];
 ```
-
-#### Constructor
-
-Arguments:
-
-- `check`: (value, Result, path, initial) -> boolean
-- `onTrue`: (value, Result, path, initial) -> Result
-- `onFalse`: (value, Result, path, initial) -> Result
-
-### `Result`
-
-This is a value class for capturing a result while walking. The `onTrue` functions in handlers should return a `Result`. See example above.
-
-Example:
-
-```javascript
-const result = new Result("foo");
-console.log(result.value);
-```
-
-#### Constructor
-
-Arguments:
-
-- `value`: string, value of result
-
-### `Context`
-
-This is passed into functions like `breakWhen` so it can make decisions when to break and stop the walking.
-
-Attributes:
-
-- `#checkPassed`: boolean, return value of Handler#check
-- `#trueResult`: Result, return value of Handler#onTrue
-- `#falseResult`: Result, return value of Handler#onFalse
