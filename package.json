@@ -1,6 +1,6 @@
 {
   "name": "saunter",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Walk through data. Do things as you go.",
   "main": "index.js",
   "scripts": {
