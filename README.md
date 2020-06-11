@@ -83,6 +83,7 @@ The function can take an array of three types of values. A function can be provi
 Matching strings and integers:
 
 ```js
+const { pathMatch } = require("saunter");
 const matcher = pathMatch(["foo", 1, "bar"]);
 console.log(matcher(["foo", 1, "bar"]));
 // prints true
@@ -91,6 +92,7 @@ console.log(matcher(["foo", 1, "bar"]));
 Matching with functions:
 
 ```js
+const { pathMatch } = require("saunter");
 function isOdd(value) {
   return value % 2 !== 0;
 }
@@ -110,6 +112,7 @@ Same as `pathMatch`.
 #### Example
 
 ```js
+const { pathStartsWith } = require("saunter");
 const matcher = pathStartsWith(["foo"]);
 console.log(matcher(["foo", 1, "bar"]));
 // prints true
@@ -122,8 +125,9 @@ Helper function to get the path from the `walkObject`.
 #### Example
 
 ```js
-// returns ["foo", 1]
+const { getPath } = require("saunter");
 getPath({ path: ["foo", 1], value: 42 });
+// returns ["foo", 1]
 ```
 
 ### `getValue`
@@ -133,6 +137,7 @@ Helper function to get the value from the `walkObject`.
 #### Example
 
 ```js
-// returns 42
+const { getValue } = require("saunter");
 getValue({ path: ["foo", 1], value: 42 });
+// returns 42
 ```
