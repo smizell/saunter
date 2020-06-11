@@ -124,43 +124,6 @@ console.log(matcher(["foo", 1, "bar"]));
 // prints true
 ```
 
-### `match`
-
-Function that looks for matches and calls the corresponding function.
-
-#### Arguments
-
-```
-match: (array[array[(walkObject) -> boolean, (walkObject) -> any]]) -> (walkObject) -> any
-```
-
-The `match` function will take an array of arrays.
-
-- The first item of the inner array is a function that takes a `walkObject` and returns a boolean.
-- The second item is a function that takes a `walkObject` and returns any.
-
-The `match` function returns a function that takes a `walkObject` and returns any.
-
-Tip: if you want to have functionality like `else`, use a function that returns true for the pattern.
-
-#### Example
-
-```js
-const { match, pathMatch } = require("../lib");
-const matcher = match([
-  [pathMatch(["foo"]), () => 1],
-  [pathMatch(["bar"]), () => 2],
-  [pathMatch(["biz"]), ({ value }) => value]
-]);
-console.log(
-  matcher({
-    path: ["biz"],
-    value: 42
-  })
-);
-// prints 42
-```
-
 ### `getPath`
 
 Helper function to get the path from the `walkObject`.
