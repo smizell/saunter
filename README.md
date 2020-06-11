@@ -83,7 +83,7 @@ The function can take an array of three types of values. A function can be provi
 Matching strings and integers:
 
 ```js
-const matcher = pathItem(["foo", 1, "bar"]);
+const matcher = pathMatch(["foo", 1, "bar"]);
 console.log(matcher(["foo", 1, "bar"]));
 // prints true
 ```
@@ -94,7 +94,23 @@ Matching with functions:
 function isOdd(value) {
   return value % 2 !== 0;
 }
-const matcher = pathItem(["foo", isOdd]);
+const matcher = pathMatch(["foo", isOdd]);
 console.log(matcher(["foo", 1]));
+// prints true
+```
+
+### `pathStartsWith`
+
+Similar to `pathMatch`, but only checks to see if the given path starts with the pattern given.
+
+#### Arguments
+
+Same as `pathMatch`.
+
+#### Examples
+
+```js
+const matcher = pathStartsWith(["foo"]);
+console.log(matcher(["foo", 1, "bar"]));
 // prints true
 ```
