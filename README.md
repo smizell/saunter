@@ -107,10 +107,32 @@ Similar to `pathMatch`, but only checks to see if the given path starts with the
 
 Same as `pathMatch`.
 
-#### Examples
+#### Example
 
 ```js
 const matcher = pathStartsWith(["foo"]);
 console.log(matcher(["foo", 1, "bar"]));
 // prints true
+```
+
+### `getPath`
+
+Helper function to get the path from the `walkObject`.
+
+#### Example
+
+```js
+// returns ["foo", 1]
+getPath({ path: ["foo", 1], value: 42 });
+```
+
+### `getValue`
+
+Helper function to get the value from the `walkObject`.
+
+#### Example
+
+```js
+// returns 42
+getValue({ path: ["foo", 1], value: 42 });
 ```

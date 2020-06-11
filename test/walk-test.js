@@ -1,6 +1,5 @@
 const { expect } = require("chai");
-const { walk } = require("../lib");
-const R = require("ramda");
+const { getValue, walk } = require("../lib");
 
 describe("walk", function() {
   context("when subject is an object", function() {
@@ -11,7 +10,7 @@ describe("walk", function() {
         c: 3
       };
       const walker = walk(subject);
-      const values = R.map(R.prop("value"), [...walker]);
+      const values = [...walker].map(getValue);
       expect(values).to.deep.equal([1, 2, 3]);
     });
     it("walks nested objects", function() {
@@ -23,7 +22,7 @@ describe("walk", function() {
         }
       };
       const walker = walk(subject);
-      const values = R.map(R.prop("value"), [...walker]);
+      const values = [...walker].map(getValue);
       expect(values).to.deep.equal([1, 2, { d: 3 }, 3]);
     });
   });
@@ -31,13 +30,13 @@ describe("walk", function() {
     it("walks through each item", function() {
       const subject = [1, 2, 3];
       const walker = walk(subject);
-      const values = R.map(R.prop("value"), [...walker]);
+      const values = [...walker].map(getValue);
       expect(values).to.deep.equal([1, 2, 3]);
     });
     it("walks nested objects", function() {
       const subject = [1, 2, { a: 3 }];
       const walker = walk(subject);
-      const values = R.map(R.prop("value"), [...walker]);
+      const values = [...walker].map(getValue);
       expect(values).to.deep.equal([1, 2, { a: 3 }, 3]);
     });
   });
