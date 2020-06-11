@@ -27,7 +27,11 @@ If `walk` gets a string, number, or boolean, it will yield a single object.
 
 #### Arguments
 
+```
 walk: (any) -> array[walkObject]
+```
+
+The `walk` function takes any kind of value and returns an array of the `walkObject`.
 
 #### Example
 
@@ -70,7 +74,9 @@ Function for matching paths. This can be used for filtering or searching through
 
 The `pathMatch` function will return a function that takes a `walkObject`.
 
+```
 pathMatch: (array) -> (walkObject) -> boolean
+```
 
 The function can take an array of three types of values. A function can be provided as a way to do logic during a check.
 
@@ -116,6 +122,43 @@ const { pathStartsWith } = require("saunter");
 const matcher = pathStartsWith(["foo"]);
 console.log(matcher(["foo", 1, "bar"]));
 // prints true
+```
+
+### `match`
+
+Function that looks for matches and calls the corresponding function.
+
+#### Arguments
+
+```
+match: (array[array[(walkObject) -> boolean, (walkObject) -> any]]) -> (walkObject) -> any
+```
+
+The `match` function will take an array of arrays.
+
+- The first item of the inner array is a function that takes a `walkObject` and returns a boolean.
+- The second item is a function that takes a `walkObject` and returns any.
+
+The `match` function returns a function that takes a `walkObject` and returns any.
+
+Tip: if you want to have functionality like `else`, use a function that returns true for the pattern.
+
+#### Example
+
+```js
+const { match, pathMatch } = require("../lib");
+const matcher = match([
+  [pathMatch(["foo"]), () => 1],
+  [pathMatch(["bar"]), () => 2],
+  [pathMatch(["biz"]), ({ value }) => value]
+]);
+console.log(
+  matcher({
+    path: ["biz"],
+    value: 42
+  })
+);
+// prints 42
 ```
 
 ### `getPath`
