@@ -43,8 +43,8 @@ const subject = {
   address: {
     city: "New York",
     state: "New York",
-    zip: "10101"
-  }
+    zip: "10101",
+  },
 };
 const walker = walk(subject);
 console.log([...walker]);
@@ -56,14 +56,60 @@ This prints:
 [
   { path: ["name"], value: "Jane Doe" },
   { path: ["email"], value: "jdoe@example.com" },
-  {
-    path: ["address"],
-    value: { city: "New York", state: "New York", zip: "10101" }
-  },
   { path: ["address", "city"], value: "New York" },
   { path: ["address", "state"], value: "New York" },
   { path: ["address", "zip"], value: "10101" }
 ]
+```
+
+### `updateWalk`
+
+This walks through an object or an array, looks for a match, calls a handler, and replaces the value with the returned value. The purpose for this function is so you can walk through data and make updates as you go.
+
+### Arguments
+
+```
+path: array[string || number]
+walkObject: {path, value: any}
+
+subject: any
+match: (walkObject, subject) -> boolean
+handle: (walkObject, subject) -> any
+matcher: {match, handle}
+
+updateWalk: (subject, array[matcher]) -> any
+```
+
+#### Example
+
+This example walks over an object, looks for even numbers, and when found, multiples them by 10.
+
+```js
+const { updateWalk } = require("saunter");
+const subject = {
+  a: 1,
+  b: 2,
+  c: 3,
+  d: 4,
+};
+const result = updateWalk(subject, [
+  {
+    match: ({ value }) => value % 2 === 0,
+    handle: ({ value }) => value * 10,
+  },
+]);
+console.log(result);
+```
+
+This prints:
+
+```js
+{
+  a: 1,
+  b: 20,
+  c: 3,
+  d: 40
+}
 ```
 
 ### `pathMatch`

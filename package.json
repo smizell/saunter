@@ -1,8 +1,8 @@
 {
   "name": "saunter",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "description": "Walk through data. Do things as you go.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha",
     "test:watch": "nodemon --exec \"mocha\""
@@ -14,5 +14,8 @@
     "chai": "^4.2.0",
     "mocha": "^7.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ramda": "^0.27.1",
+    "ramda-adjunct": "^2.27.0"
+  }
 }
