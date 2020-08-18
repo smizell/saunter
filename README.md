@@ -29,6 +29,10 @@ If `walk` gets a string, number, or boolean, it will yield a single object.
 
 ```
 walk: (any) -> array[walkObject]
+
+walkObject: {path, value}
+path: array[string | number]
+value: any
 ```
 
 The `walk` function takes any kind of value and returns an array of the `walkObject`.
@@ -68,17 +72,18 @@ This walks through an object or an array, looks for a match, calls a handler, an
 
 ### Arguments
 
+See `walk` function for `walkObject` definition.
+
 ```
-path: array[string || number]
-walkObject: {path, value: any}
+updateWalk: (subject, array[matcher]) -> any
 
 subject: any
+matcher: {match, handle}
 match: (walkObject, subject) -> boolean
 handle: (walkObject, subject) -> any
-matcher: {match, handle}
-
-updateWalk: (subject, array[matcher]) -> any
 ```
+
+The `subject` is passed into the `match` and `handle` functions to allow you to get other information, such as parents or children.
 
 #### Example
 
@@ -121,14 +126,12 @@ Function for matching paths. This can be used for filtering or searching through
 The `pathMatch` function will return a function that takes a `walkObject`.
 
 ```
-pathMatch: (array) -> (walkObject) -> boolean
+pathMatch: (array[string | integer | check]) -> (walkObject) -> boolean
+
+check: (string | integer) -> boolean
 ```
 
-The function can take an array of three types of values. A function can be provided as a way to do logic during a check.
-
-1. string
-1. integer
-1. function: (string || integer) -> boolean
+The function can take an array of three types of values. A `check` function can be provided as a way to do logic during a check.
 
 #### Examples
 
@@ -174,6 +177,14 @@ console.log(matcher(["foo", 1, "bar"]));
 
 Helper function to get the path from the `walkObject`.
 
+#### Arguments
+
+See `walk` function for `walkObject` definition.
+
+```
+getPath: (walkObject) -> path
+```
+
 #### Example
 
 ```js
@@ -185,6 +196,12 @@ getPath({ path: ["foo", 1], value: 42 });
 ### `getValue`
 
 Helper function to get the value from the `walkObject`.
+
+#### Arguments
+
+```
+getValue: (walkObject) -> any
+```
 
 #### Example
 
